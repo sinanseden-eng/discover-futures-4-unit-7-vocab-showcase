@@ -31,14 +31,6 @@
 
         .bg-gradient-front { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); }
         .bg-gradient-back { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
-        
-        /* Example Sentence highlighting */
-        .example-sentence { position: relative; z-index: 1; }
-        .example-sentence::before {
-            content: ''; position: absolute; bottom: 0; left: -5px; right: -5px;
-            height: 40%; background-color: rgba(253, 224, 71, 0.3); z-index: -1;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
@@ -80,10 +72,49 @@
             ]
         };
 
+        const quizQuestionsData = [
+            // Idioms (Situational)
+            { situation: "When my little brother deleted my 100-hour game save file, I started to ___.", correct: "see red", options: ["see red", "feel blue", "stick around", "break down"], feedback: "Idiom: To become very angry suddenly." },
+            { situation: "My parents won't let me stay out past 10 PM, but 10:15 is kind of ___.", correct: "a gray area", options: ["a gray area", "a white-knuckle ride", "a priority", "a sickness"], feedback: "Idiom: An unclear situation where the rules aren't obvious." },
+            { situation: "After her dog ran away, Sarah was ___ for weeks.", correct: "feeling blue", options: ["feeling blue", "seeing red", "green with envy", "creative"], feedback: "Idiom: Feeling sad or depressed." },
+            { situation: "I couldn't get official tickets to the concert, so I had to buy them ___.", correct: "on the black market", options: ["on the black market", "in a gray area", "green with envy", "feeling blue"], feedback: "Idiom: Bought or sold illegally." },
+            { situation: "When he showed up at school in a brand new sports car, all his friends were ___.", correct: "green with envy", options: ["green with envy", "feeling blue", "seeing red", "a white-knuckle ride"], feedback: "Idiom: Very jealous of someone else's success or belongings." },
+            { situation: "That new horror movie was intense from start to finish; it was a total ___.", correct: "white-knuckle ride", options: ["white-knuckle ride", "gray area", "possibility", "priority"], feedback: "Idiom: A thrilling or terrifying experience." },
+            { situation: "The referee's decision to allow the goal was ___; nobody knew if it was technically against the rules.", correct: "a gray area", options: ["a gray area", "on the black market", "a white-knuckle ride", "a sickness"], feedback: "Idiom: An unclear situation where the rules aren't obvious." },
+            { situation: "The teacher ___ when she caught the students cheating on the final exam.", correct: "saw red", options: ["saw red", "felt blue", "broke down", "stuck around"], feedback: "Idiom: To become very angry suddenly." },
+            { situation: "I'm ___ today because it's raining and we had to cancel our beach trip.", correct: "feeling blue", options: ["feeling blue", "seeing red", "green with envy", "strong"], feedback: "Idiom: Feeling sad or depressed." },
+            { situation: "Selling stolen electronics ___ is highly illegal.", correct: "on the black market", options: ["on the black market", "in a gray area", "a white-knuckle ride", "a priority"], feedback: "Idiom: Bought or sold illegally." },
+            { situation: "Seeing her best friend win the talent show made her smile, but deep down she was ___.", correct: "green with envy", options: ["green with envy", "feeling blue", "seeing red", "thick"], feedback: "Idiom: Very jealous of someone else." },
+            { situation: "Driving through the snowstorm in the mountains was a real ___.", correct: "white-knuckle ride", options: ["white-knuckle ride", "gray area", "priority", "creativity"], feedback: "Idiom: A thrilling or terrifying experience." },
+            
+            // Word Families (Context Clues)
+            { situation: "He didn't have the ___ to lift the heavy box by himself.", correct: "strength", options: ["strength", "strong", "thickness", "thick"], feedback: "Noun form of strong: Having physical or mental power." },
+            { situation: "There is a strong ___ that it will snow tomorrow, so we might not have school.", correct: "possibility", options: ["possibility", "possible", "significance", "significant"], feedback: "Noun form of possible: A chance that something might happen." },
+            { situation: "Do you understand the ___ of this historical event? It changed the world.", correct: "significance", options: ["significance", "significant", "creativity", "creative"], feedback: "Noun form of significant: Importance or meaning." },
+            { situation: "Finishing my homework is my top ___ right now; I can play video games later.", correct: "priority", options: ["priority", "prior", "possibility", "possible"], feedback: "Noun form of prior: Something that is more important than other things." },
+            { situation: "The ___ of the ice on the lake isn't safe enough to skate on yet.", correct: "thickness", options: ["thickness", "thick", "strength", "strong"], feedback: "Noun form of thick: How wide or deep something is." },
+            { situation: "Her painting won first prize because of her incredible ___.", correct: "creativity", options: ["creativity", "creative", "priority", "prior"], feedback: "Noun form of creative: The ability to invent new things or ideas." },
+            { situation: "Due to a sudden ___, he had to miss the basketball finals.", correct: "sickness", options: ["sickness", "sick", "significance", "thickness"], feedback: "Noun form of sick: An illness or poor health condition." },
+            { situation: "You need to be physically ___ to compete in the weightlifting tournament.", correct: "strong", options: ["strong", "strength", "thick", "thickness"], feedback: "Adjective form: Having physical or mental power." },
+            { situation: "Is it really ___ to finish this entire pizza by yourself?", correct: "possible", options: ["possible", "possibility", "creative", "creativity"], feedback: "Adjective form: Able to be done or achieved." },
+            { situation: "The new eco-friendly laws will have a ___ impact on how we recycle plastic.", correct: "significant", options: ["significant", "significance", "strong", "strength"], feedback: "Adjective form: Great or important enough to be noticed." },
+
+            // Phrasal Verbs (Environmental / General Contexts)
+            { situation: "We usually ___ a gallon of milk every two days in our house.", correct: "go through", options: ["go through", "run out of", "cut down on", "break down"], feedback: "Phrasal Verb: To use up a lot of something entirely." },
+            { situation: "Please ___ your gum in the trash can, not under the desk!", correct: "dispose of", options: ["dispose of", "build up", "stick around", "come up with"], feedback: "Phrasal Verb: To throw away correctly." },
+            { situation: "Plastic bottles take hundreds of years to ___ in a landfill.", correct: "break down", options: ["break down", "build up", "kill off", "speed up"], feedback: "Phrasal Verb: To separate into smaller parts or decompose." },
+            { situation: "If you don't sweep the floor, the dust and hair will just ___ in the corners.", correct: "build up", options: ["build up", "break down", "dispose of", "run out of"], feedback: "Phrasal Verb: To increase or collect over time." },
+            { situation: "I think I'll ___ after class to ask the teacher a few questions.", correct: "stick around", options: ["stick around", "go through", "run out of", "kill off"], feedback: "Phrasal Verb: To stay somewhere for a period of time." },
+            { situation: "The pollution in the river might completely ___ all the fish.", correct: "kill off", options: ["kill off", "build up", "stick around", "cut down on"], feedback: "Phrasal Verb: To destroy a whole species or population." },
+            { situation: "I need to ___ sugar because I've been eating way too much candy lately.", correct: "cut down on", options: ["cut down on", "speed up", "build up", "go through"], feedback: "Phrasal Verb: To reduce the amount you use or do." },
+            { situation: "My mom told me to ___ my old toys by donating them to charity.", correct: "get rid of", options: ["get rid of", "build up", "run out of", "break down"], feedback: "Phrasal Verb: To throw away or remove something you don't want." },
+            { situation: "Oh no, we've ___ milk! I can't eat my cereal now.", correct: "run out of", options: ["run out of", "come up with", "build up", "cut down on"], feedback: "Phrasal Verb: To use everything so there is nothing left." },
+            { situation: "We need to ___ a brilliant idea for our science fair project.", correct: "come up with", options: ["come up with", "dispose of", "speed up", "go through"], feedback: "Phrasal Verb: To think of a plan, idea, or solution." }
+        ];
+
         const Flashcard = ({ term, def, example, isFocusMode }) => {
             const [flipped, setFlipped] = useState(false);
 
-            // Reset flip state if the term changes (important for focus mode slider)
             useEffect(() => { setFlipped(false); }, [term]);
 
             const sizeClasses = isFocusMode ? "focus-card" : "grid-card";
@@ -93,13 +124,8 @@
             const padding = isFocusMode ? "p-10" : "p-6";
 
             return (
-                <div 
-                    className={`perspective-1000 w-full ${sizeClasses} cursor-pointer group`} 
-                    onClick={() => setFlipped(!flipped)}
-                >
+                <div className={`perspective-1000 w-full ${sizeClasses} cursor-pointer group`} onClick={() => setFlipped(!flipped)}>
                     <div className={`flip-inner relative w-full h-full transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
-                        
-                        {/* Front of Card */}
                         <div className={`absolute w-full h-full backface-hidden bg-gradient-front rounded-2xl shadow-lg border-b-4 border-blue-500 flex flex-col items-center justify-center ${padding} text-center group-hover:shadow-xl transition-shadow`}>
                             <h3 className={`font-extrabold text-slate-800 ${termSize}`}>{term}</h3>
                             <div className="absolute bottom-6 flex items-center text-blue-500 animate-pulse">
@@ -107,14 +133,10 @@
                                 <span className={isFocusMode ? "text-xl font-semibold" : "text-sm font-semibold"}>Tap to Reveal</span>
                             </div>
                         </div>
-
-                        {/* Back of Card */}
                         <div className={`absolute w-full h-full backface-hidden bg-gradient-back rotate-y-180 rounded-2xl shadow-xl flex flex-col items-center justify-center ${padding} text-center text-white`}>
                             <h4 className={`font-bold text-blue-100 uppercase tracking-wider mb-2 ${isFocusMode ? 'text-xl' : 'text-xs'}`}>Definition</h4>
                             <p className={`font-medium ${defSize}`}>{def}</p>
-                            
                             <div className="w-16 h-1 bg-blue-400 rounded my-2 opacity-50"></div>
-                            
                             <h4 className={`font-bold text-blue-200 uppercase tracking-wider mt-2 mb-2 ${isFocusMode ? 'text-xl' : 'text-xs'}`}>Example</h4>
                             <p className={`font-light italic text-blue-50 ${exampleSize}`}>"{example}"</p>
                         </div>
@@ -123,110 +145,231 @@
             );
         };
 
+        const Quiz = () => {
+            const [questions, setQuestions] = useState([]);
+            const [currentQ, setCurrentQ] = useState(0);
+            const [score, setScore] = useState(0);
+            const [showResult, setShowResult] = useState(false);
+            const [selectedAnswer, setSelectedAnswer] = useState(null);
+            const [quizStarted, setQuizStarted] = useState(false);
+
+            const startQuiz = () => {
+                // Shuffle all 30 questions
+                const shuffled = [...quizQuestionsData].sort(() => 0.5 - Math.random());
+                
+                // Shuffle options inside each question to prevent patterns
+                const randomizedOptionsQuestions = shuffled.map(q => {
+                    return {
+                        ...q,
+                        options: [...q.options].sort(() => 0.5 - Math.random())
+                    }
+                });
+
+                setQuestions(randomizedOptionsQuestions);
+                setCurrentQ(0);
+                setScore(0);
+                setShowResult(false);
+                setSelectedAnswer(null);
+                setQuizStarted(true);
+            };
+
+            const handleAnswer = (option) => {
+                if (selectedAnswer) return; 
+                setSelectedAnswer(option);
+                if (option === questions[currentQ].correct) {
+                    setScore(score + 1);
+                }
+            };
+
+            const nextQuestion = () => {
+                if (currentQ + 1 < questions.length) {
+                    setCurrentQ(currentQ + 1);
+                    setSelectedAnswer(null);
+                } else {
+                    setShowResult(true);
+                }
+            };
+
+            if (!quizStarted) {
+                return (
+                    <div className="bg-white rounded-2xl shadow-lg p-10 text-center max-w-2xl mx-auto">
+                        <i className="fas fa-brain text-6xl text-blue-500 mb-6"></i>
+                        <h2 className="text-3xl font-bold text-slate-800 mb-4">Vocabulary Challenge</h2>
+                        <p className="text-slate-600 mb-8 text-lg">Test your knowledge! You will face <strong>30 situational questions</strong> designed to test your understanding of Unit 7 idioms, word families, and environment verbs in context.</p>
+                        <button onClick={startQuiz} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl text-xl shadow-md transition transform hover:scale-105">
+                            Start 30-Question Quiz
+                        </button>
+                    </div>
+                );
+            }
+
+            if (showResult) {
+                const percentage = (score / questions.length) * 100;
+                let message = "";
+                if (percentage >= 90) message = "Outstanding! You've mastered this unit completely.";
+                else if (percentage >= 70) message = "Great job! You know these situations well.";
+                else if (percentage >= 50) message = "Good effort, but keep practicing the idioms.";
+                else message = "Time to review the flashcards again!";
+
+                return (
+                    <div className="bg-white rounded-2xl shadow-lg p-10 text-center max-w-2xl mx-auto">
+                        <i className={`fas fa-trophy text-6xl mb-6 ${percentage >= 70 ? 'text-yellow-400' : 'text-slate-300'}`}></i>
+                        <h2 className="text-4xl font-bold text-slate-800 mb-2">Quiz Complete!</h2>
+                        <p className="text-xl text-slate-600 mb-6">{message}</p>
+                        <div className="text-5xl font-extrabold text-blue-600 mb-8">{score} / {questions.length}</div>
+                        <button onClick={startQuiz} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-md transition mr-4">
+                            Retake Quiz
+                        </button>
+                    </div>
+                );
+            }
+
+            const q = questions[currentQ];
+
+            return (
+                <div className="max-w-3xl mx-auto">
+                    {/* Progress Bar */}
+                    <div className="mb-6 flex justify-between items-center">
+                        <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Question {currentQ + 1} of {questions.length}</span>
+                        <span className="text-sm font-bold text-blue-500 uppercase tracking-wider">Score: {score}</span>
+                    </div>
+                    <div className="w-full bg-slate-200 rounded-full h-2.5 mb-8">
+                        <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}></div>
+                    </div>
+
+                    {/* Question Card */}
+                    <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 border-t-4 border-blue-500">
+                        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Fill in the blank:</h3>
+                        <p className="text-2xl font-semibold text-slate-800 leading-relaxed">"{q.situation}"</p>
+                    </div>
+
+                    {/* Options */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        {q.options.map((option, index) => {
+                            let btnStyle = "bg-white border-2 border-slate-200 text-slate-700 hover:border-blue-500 hover:bg-blue-50";
+                            
+                            if (selectedAnswer) {
+                                if (option === q.correct) {
+                                    btnStyle = "bg-green-500 border-green-600 text-white shadow-md"; // Correct answer highlights green
+                                } else if (option === selectedAnswer) {
+                                    btnStyle = "bg-red-500 border-red-600 text-white shadow-md"; // Wrong selection highlights red
+                                } else {
+                                    btnStyle = "bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed opacity-60"; // Others fade out
+                                }
+                            }
+
+                            return (
+                                <button 
+                                    key={index}
+                                    onClick={() => handleAnswer(option)}
+                                    disabled={!!selectedAnswer}
+                                    className={`p-4 rounded-xl font-bold text-lg transition-all ${btnStyle}`}
+                                >
+                                    {option}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Feedback & Next Button */}
+                    {selectedAnswer && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex flex-col sm:flex-row justify-between items-center animate-fade-in">
+                            <div className="mb-4 sm:mb-0 max-w-md">
+                                <h4 className="font-bold text-blue-800 text-sm uppercase tracking-wider mb-1">Learning Note:</h4>
+                                <p className="font-medium text-blue-900">{q.feedback}</p>
+                            </div>
+                            <button 
+                                onClick={nextQuestion}
+                                className="whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow transition ml-0 sm:ml-4"
+                            >
+                                {currentQ + 1 === questions.length ? 'See Results' : 'Next Question'} <i className="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         const App = () => {
             const [activeTab, setActiveTab] = useState('idioms');
-            const [viewMode, setViewMode] = useState('focus'); // 'grid' or 'focus'
+            const [viewMode, setViewMode] = useState('focus'); 
             const [currentIndex, setCurrentIndex] = useState(0);
 
-            const activeData = vocabData[activeTab];
+            const activeData = vocabData[activeTab] || [];
 
-            // Reset index when changing tabs
             useEffect(() => { setCurrentIndex(0); }, [activeTab]);
 
-            const nextCard = () => {
-                setCurrentIndex((prev) => (prev + 1) % activeData.length);
-            };
-
-            const prevCard = () => {
-                setCurrentIndex((prev) => (prev - 1 + activeData.length) % activeData.length);
-            };
+            const nextCard = () => setCurrentIndex((prev) => (prev + 1) % activeData.length);
+            const prevCard = () => setCurrentIndex((prev) => (prev - 1 + activeData.length) % activeData.length);
 
             return (
                 <div className="min-h-screen pb-12 font-sans text-slate-800">
-                    {/* Header */}
                     <header className="bg-white shadow-sm pt-10 pb-6 mb-8 border-b border-teal-100">
                         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
                             <div className="text-center md:text-left mb-4 md:mb-0">
                                 <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500 mb-1">
                                     Unit 7: Why do colors matter?
                                 </h1>
-                                <p className="text-lg text-slate-500 font-medium">Interactive Vocabulary Showcase</p>
+                                <p className="text-lg text-slate-500 font-medium">Interactive Vocabulary Showcase & Quiz</p>
                             </div>
                             
-                            {/* View Mode Toggle */}
-                            <div className="flex bg-slate-100 p-1 rounded-lg">
-                                <button 
-                                    onClick={() => setViewMode('focus')}
-                                    className={`px-4 py-2 rounded-md font-semibold text-sm transition-colors ${viewMode === 'focus' ? 'bg-white text-blue-600 shadow' : 'text-slate-500 hover:text-slate-700'}`}
-                                >
-                                    <i className="fas fa-chalkboard mr-2"></i> Board View
-                                </button>
-                                <button 
-                                    onClick={() => setViewMode('grid')}
-                                    className={`px-4 py-2 rounded-md font-semibold text-sm transition-colors ${viewMode === 'grid' ? 'bg-white text-blue-600 shadow' : 'text-slate-500 hover:text-slate-700'}`}
-                                >
-                                    <i className="fas fa-th mr-2"></i> Grid View
-                                </button>
-                            </div>
+                            {/* Hide View Toggles if in Quiz Tab */}
+                            {activeTab !== 'quiz' && (
+                                <div className="flex bg-slate-100 p-1 rounded-lg">
+                                    <button onClick={() => setViewMode('focus')} className={`px-4 py-2 rounded-md font-semibold text-sm transition-colors ${viewMode === 'focus' ? 'bg-white text-blue-600 shadow' : 'text-slate-500 hover:text-slate-700'}`}>
+                                        <i className="fas fa-chalkboard mr-2"></i> Board View
+                                    </button>
+                                    <button onClick={() => setViewMode('grid')} className={`px-4 py-2 rounded-md font-semibold text-sm transition-colors ${viewMode === 'grid' ? 'bg-white text-blue-600 shadow' : 'text-slate-500 hover:text-slate-700'}`}>
+                                        <i className="fas fa-th mr-2"></i> Grid View
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </header>
 
                     <div className="max-w-7xl mx-auto px-4">
                         {/* Category Navigation */}
                         <div className="flex flex-wrap justify-center mb-10 gap-3">
-                            <button 
-                                onClick={() => setActiveTab('idioms')}
-                                className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'idioms' ? 'bg-blue-50 border-blue-500 text-blue-700 shadow-md transform scale-105' : 'bg-white border-transparent text-slate-500 hover:bg-slate-50 shadow-sm'}`}
-                            >
-                                <span className="text-2xl mr-3">🎨</span> Color Idioms
+                            <button onClick={() => setActiveTab('idioms')} className={`px-5 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'idioms' ? 'bg-blue-50 border-blue-500 text-blue-700 shadow-md transform scale-105' : 'bg-white border-transparent text-slate-500 hover:bg-slate-50 shadow-sm'}`}>
+                                <span className="text-xl mr-2">🎨</span> Idioms
                             </button>
-                            <button 
-                                onClick={() => setActiveTab('wordFamilies')}
-                                className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'wordFamilies' ? 'bg-purple-50 border-purple-500 text-purple-700 shadow-md transform scale-105' : 'bg-white border-transparent text-slate-500 hover:bg-slate-50 shadow-sm'}`}
-                            >
-                                <span className="text-2xl mr-3">🔗</span> Word Families
+                            <button onClick={() => setActiveTab('wordFamilies')} className={`px-5 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'wordFamilies' ? 'bg-purple-50 border-purple-500 text-purple-700 shadow-md transform scale-105' : 'bg-white border-transparent text-slate-500 hover:bg-slate-50 shadow-sm'}`}>
+                                <span className="text-xl mr-2">🔗</span> Word Families
                             </button>
-                            <button 
-                                onClick={() => setActiveTab('phrasalVerbs')}
-                                className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'phrasalVerbs' ? 'bg-teal-50 border-teal-500 text-teal-700 shadow-md transform scale-105' : 'bg-white border-transparent text-slate-500 hover:bg-slate-50 shadow-sm'}`}
-                            >
-                                <span className="text-2xl mr-3">🌍</span> Environment Verbs
+                            <button onClick={() => setActiveTab('phrasalVerbs')} className={`px-5 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'phrasalVerbs' ? 'bg-teal-50 border-teal-500 text-teal-700 shadow-md transform scale-105' : 'bg-white border-transparent text-slate-500 hover:bg-slate-50 shadow-sm'}`}>
+                                <span className="text-xl mr-2">🌍</span> Environment Verbs
+                            </button>
+                            <div className="w-px bg-slate-300 mx-2 hidden sm:block"></div>
+                            <button onClick={() => setActiveTab('quiz')} className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'quiz' ? 'bg-indigo-50 border-indigo-500 text-indigo-700 shadow-md transform scale-105' : 'bg-slate-800 border-transparent text-white hover:bg-slate-700 shadow-md'}`}>
+                                <i className="fas fa-brain mr-2"></i> Practice Quiz
                             </button>
                         </div>
 
                         {/* Content Area */}
-                        {viewMode === 'grid' ? (
-                            /* Grid View */
+                        {activeTab === 'quiz' ? (
+                            <Quiz />
+                        ) : viewMode === 'grid' ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {activeData.map((item, index) => (
                                     <Flashcard key={`${activeTab}-${index}`} {...item} isFocusMode={false} />
                                 ))}
                             </div>
                         ) : (
-                            /* Focus / Board View */
                             <div className="relative pt-4">
                                 <div className="text-center mb-4 text-slate-500 font-bold tracking-widest uppercase text-sm">
                                     Card {currentIndex + 1} of {activeData.length}
                                 </div>
-                                
                                 <div className="flex items-center justify-between gap-4">
                                     <button onClick={prevCard} className="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-blue-600 hover:bg-blue-50 transition transform hover:-translate-x-1 focus:outline-none focus:ring-4 focus:ring-blue-200">
                                         <i className="fas fa-chevron-left text-2xl"></i>
                                     </button>
-                                    
                                     <div className="flex-grow">
-                                        <Flashcard 
-                                            key={`${activeTab}-${currentIndex}`} 
-                                            {...activeData[currentIndex]} 
-                                            isFocusMode={true} 
-                                        />
+                                        <Flashcard key={`${activeTab}-${currentIndex}`} {...activeData[currentIndex]} isFocusMode={true} />
                                     </div>
-
                                     <button onClick={nextCard} className="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-blue-600 hover:bg-blue-50 transition transform hover:translate-x-1 focus:outline-none focus:ring-4 focus:ring-blue-200">
                                         <i className="fas fa-chevron-right text-2xl"></i>
                                     </button>
                                 </div>
-                                
                                 <p className="text-center mt-8 text-slate-400">
                                     Use the arrows to navigate. Click the card to reveal the definition and example sentence.
                                 </p>
