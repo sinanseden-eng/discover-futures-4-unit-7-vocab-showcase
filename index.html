@@ -49,13 +49,13 @@
                 { term: "A white-knuckle ride", def: "A thrilling or terrifying experience.", example: "The new rollercoaster at the theme park was a total white-knuckle ride!" }
             ],
             wordFamilies: [
-                { term: "Strong → Strength", def: "Having physical or mental power.", example: "It takes a lot of inner strength to stand up to a bully at school." },
-                { term: "Possible → Possibility", def: "A chance that something might happen.", example: "There's a strong possibility that our school trip will be canceled because of the storm." },
-                { term: "Significant → Significance", def: "Importance or meaning.", example: "Do you understand the significance of this exam for your college applications?" },
-                { term: "Prior → Priority", def: "Something that is more important than other things.", example: "My top priority this weekend is finishing my science project before I play any video games." },
-                { term: "Thick → Thickness", def: "How wide or deep something is.", example: "The thickness of the ice on the lake isn't safe enough for skating yet." },
-                { term: "Creative → Creativity", def: "The ability to invent new things or ideas.", example: "You need a lot of creativity to design a viral TikTok video." },
-                { term: "Sick → Sickness", def: "An illness or poor health condition.", example: "Because of the sudden sickness spreading in class, half the students are absent today." }
+                { term: "Strong → Strength", def: "Having physical or mental power.", example1: "You need to be mentally strong to deal with cyberbullying.", example2: "It takes a lot of inner strength to stand up to a bully at school." },
+                { term: "Possible → Possibility", def: "A chance that something might happen.", example1: "Is it possible to finish this entire group project in one night?", example2: "There's a strong possibility that our school trip will be canceled because of the storm." },
+                { term: "Significant → Significance", def: "Importance or meaning.", example1: "The new eco-friendly laws will have a significant impact on how we recycle plastic.", example2: "Do you understand the significance of this exam for your college applications?" },
+                { term: "Prior → Priority", def: "Something that is more important than other things.", example1: "I can't go to the movies tonight because I have a prior commitment with my study group.", example2: "My top priority this weekend is finishing my science project before I play any video games." },
+                { term: "Thick → Thickness", def: "How wide or deep something is.", example1: "The fog was so thick this morning that the school bus was delayed.", example2: "The thickness of the ice on the lake isn't safe enough for skating yet." },
+                { term: "Creative → Creativity", def: "The ability to invent new things or ideas.", example1: "She is incredibly creative and always designs the best posters for the school play.", example2: "You need a lot of creativity to design a viral TikTok video." },
+                { term: "Sick → Sickness", def: "An illness or poor health condition.", example1: "I feel too sick to go to school today, so I'm going to rest in bed.", example2: "Because of the sudden sickness spreading in class, half the students are absent today." }
             ],
             phrasalVerbs: [
                 { term: "Go through", def: "To use up a lot of something entirely.", example: "We go through so many plastic water bottles during basketball practice." },
@@ -112,7 +112,7 @@
             { situation: "We need to ___ a brilliant idea for our science fair project.", correct: "come up with", options: ["come up with", "dispose of", "speed up", "go through"], feedback: "Phrasal Verb: To think of a plan, idea, or solution." }
         ];
 
-        const Flashcard = ({ term, def, example, isFocusMode }) => {
+        const Flashcard = ({ term, def, example, example1, example2, isFocusMode }) => {
             const [flipped, setFlipped] = useState(false);
 
             useEffect(() => { setFlipped(false); }, [term]);
@@ -138,7 +138,14 @@
                             <p className={`font-medium ${defSize}`}>{def}</p>
                             <div className="w-16 h-1 bg-blue-400 rounded my-2 opacity-50"></div>
                             <h4 className={`font-bold text-blue-200 uppercase tracking-wider mt-2 mb-2 ${isFocusMode ? 'text-xl' : 'text-xs'}`}>Example</h4>
-                            <p className={`font-light italic text-blue-50 ${exampleSize}`}>"{example}"</p>
+                            {example ? (
+                                <p className={`font-light italic text-blue-50 ${exampleSize}`}>"{example}"</p>
+                            ) : (
+                                <div className="space-y-3 w-full text-left px-4">
+                                    <p className={`font-light italic text-blue-50 ${exampleSize}`}><span className="font-bold text-blue-300">Adj:</span> "{example1}"</p>
+                                    <p className={`font-light italic text-blue-50 ${exampleSize}`}><span className="font-bold text-blue-300">Noun:</span> "{example2}"</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
