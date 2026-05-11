@@ -297,6 +297,268 @@
             );
         };
 
+        const WordNetworkBuilder = () => {
+             const [activeMethod, setActiveMethod] = useState('mindMap');
+             const [selectedWord, setSelectedWord] = useState('');
+             const [selectedFrayerWord, setSelectedFrayerWord] = useState('Kill off');
+             
+             const mindMapWords = ["dispose of", "significant", "gray area", "feeling blue"];
+             
+             const mindMapData = {
+                 "dispose of": {
+                     synonyms: ["throw away", "get rid of", "discard", "bin"],
+                     objects: ["waste", "trash", "batteries", "chemicals"],
+                     context: ["recycling", "environment", "pollution"]
+                 },
+                 "significant": {
+                     synonyms: ["important", "major", "meaningful", "substantial"],
+                     collocations: ["impact", "change", "difference", "amount"],
+                     context: ["science", "statistics", "history"]
+                 },
+                 "gray area": {
+                      synonyms: ["unclear", "ambiguous", "uncertainty"],
+                      related: ["rules", "ethics", "law", "boundaries"],
+                      context: ["debates", "school rules", "internet usage"]
+                 },
+                 "feeling blue": {
+                      synonyms: ["sad", "depressed", "down", "unhappy"],
+                      causes: ["bad news", "weather", "loneliness", "failure"],
+                      cures: ["friends", "pizza", "music", "exercise"]
+                 }
+             };
+
+             const collocationData = [
+                 { root: "Break", collocations: ["down (decompose)", "the rules", "a promise", "a habit", "the ice", "the law"] },
+                 { root: "Strong", collocations: ["possibility", "evidence", "opinion", "coffee", "accent", "influence"] },
+                 { root: "Run", collocations: ["out of (time/money)", "a business", "a risk", "late", "into (someone)", "errands"] },
+                 { root: "Significant", collocations: ["amount", "number", "difference", "impact", "contribution", "increase"] },
+                 { root: "Prior", collocations: ["notice", "experience", "arrangement", "knowledge", "consent", "engagement"] },
+                 { root: "Thick", collocations: ["fog", "smoke", "accent", "hair", "skin", "forest"] },
+                 { root: "Sick", collocations: ["and tired", "leave", "pay", "note", "day", "of (something)"] },
+                 { root: "Creative", collocations: ["writing", "thinking", "process", "control", "ideas", "director"] },
+             ];
+
+             const frayerData = {
+                 "Kill off": {
+                     word: "Kill off",
+                     definition: "To destroy a whole species or population completely.",
+                     characteristics: ["Usually referring to animals/plants", "Implies a large scale", "Often caused by pollution or disease"],
+                     examples: ["Chemical pollution in the river could completely kill off the local fish.", "The use of pesticides is killing off the bee population."],
+                     nonExamples: ["Saving an endangered species", "A single animal dying naturally", "Protecting a habitat"]
+                 },
+                 "Get rid of": {
+                     word: "Get rid of",
+                     definition: "To throw away, sell, or destroy something you do not want anymore.",
+                     characteristics: ["Informal and common", "Implies wanting something gone", "Can be objects or abstract things (like a cold)"],
+                     examples: ["I need to get rid of these old clothes.", "We finally got rid of the mice in the basement."],
+                     nonExamples: ["Keeping something", "Collecting items", "Holding onto a memory"]
+                 },
+                 "Dispose of": {
+                     word: "Dispose of",
+                     definition: "To throw away or get rid of something, often in a careful or responsible way.",
+                     characteristics: ["More formal than 'get rid of'", "Often relates to hazardous materials or waste", "Implies a proper procedure"],
+                     examples: ["How should we properly dispose of these old batteries?", "The company was fined for illegally disposing of toxic waste."],
+                     nonExamples: ["Littering", "Hoarding", "Keeping something"]
+                 },
+                 "Break down": {
+                     word: "Break down",
+                     definition: "To separate into simpler substances (decompose) OR to stop working.",
+                     characteristics: ["Can mean decay (biology/environment) or mechanical failure", "Happens over time or suddenly"],
+                     examples: ["Plastic bags take hundreds of years to break down.", "My car broke down on the highway."],
+                     nonExamples: ["Building something up", "Functioning perfectly", "Preserving"]
+                 },
+                 "Build up": {
+                     word: "Build up",
+                     definition: "To accumulate or increase over time.",
+                     characteristics: ["Often happens gradually", "Can be physical (dirt) or abstract (pressure/tension)"],
+                     examples: ["Plaque can build up on your teeth if you don't brush.", "Stress has been building up before the exams."],
+                     nonExamples: ["Decreasing", "Disappearing quickly", "Breaking down"]
+                 },
+                 "Stick around": {
+                     word: "Stick around",
+                     definition: "To stay somewhere for a period of time, often waiting for something.",
+                     characteristics: ["Informal", "Implies lingering or remaining"],
+                     examples: ["If you stick around after the show, you might meet the band.", "I think I'll stick around and see what happens next."],
+                     nonExamples: ["Leaving immediately", "Departing quickly", "Running away"]
+                 },
+                 "Cut down on": {
+                     word: "Cut down on",
+                     definition: "To reduce the size, amount, or number of something.",
+                     characteristics: ["Often used with diet, expenses, or bad habits", "Implies intentional reduction"],
+                     examples: ["I'm trying to cut down on sugar to eat healthier.", "The company needs to cut down on its travel expenses."],
+                     nonExamples: ["Increasing consumption", "Adding to something", "Indulging"]
+                 },
+                 "Run out of": {
+                     word: "Run out of",
+                     definition: "To use up all of a supply of something so there is none left.",
+                     characteristics: ["Implies depletion", "Can be tangible (milk) or intangible (time/patience)"],
+                     examples: ["We ran out of milk this morning.", "I'm running out of patience with this slow computer."],
+                     nonExamples: ["Stockpiling", "Having plenty of something", "Replenishing"]
+                 },
+                 "Come up with": {
+                     word: "Come up with",
+                     definition: "To think of an idea, plan, or solution.",
+                     characteristics: ["Involves creativity or problem-solving", "Often used in meetings or brainstorming"],
+                     examples: ["We need to come up with a better marketing strategy.", "She came up with a brilliant excuse for being late."],
+                     nonExamples: ["Forgetting", "Lacking ideas", "Giving up"]
+                 },
+                 "Speed up": {
+                     word: "Speed up",
+                     definition: "To move or happen faster, or to cause something to do so.",
+                     characteristics: ["Relates to velocity or time", "Can be physical movement or a process"],
+                     examples: ["We need to speed up the manufacturing process.", "The car sped up as it merged onto the highway."],
+                     nonExamples: ["Slowing down", "Delaying", "Pausing"]
+                 },
+                 "Go through": {
+                     word: "Go through",
+                     definition: "To consume or use up a lot of something, OR to experience a difficult situation.",
+                     characteristics: ["Can mean physical consumption or emotional endurance"],
+                     examples: ["We go through a gallon of milk a week.", "She's going through a tough time right now."],
+                     nonExamples: ["Conserving", "Avoiding a situation", "Saving"]
+                 },
+                 "See red": {
+                     word: "See red",
+                     definition: "To become very angry suddenly.",
+                     characteristics: ["An idiom", "Implies a loss of control due to anger"],
+                     examples: ["When he insulted my friend, I just saw red.", "Traffic jams always make me see red."],
+                     nonExamples: ["Staying calm", "Feeling peaceful", "Being indifferent"]
+                 },
+                 "A gray area": {
+                     word: "A gray area",
+                     definition: "A situation that is not clear or where the rules are not known.",
+                     characteristics: ["An idiom", "Relates to ambiguity or lack of clarity"],
+                     examples: ["The legality of that software is a bit of a gray area.", "Dress codes can sometimes be a gray area."],
+                     nonExamples: ["Black and white rules", "Absolute certainty", "Clear guidelines"]
+                 }
+             };
+
+             const currentFrayerData = frayerData[selectedFrayerWord];
+
+             return (
+                 <div className="max-w-4xl mx-auto">
+                     <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border-t-4 border-indigo-500">
+                         <h2 className="text-3xl font-bold text-slate-800 mb-4"><i className="fas fa-project-diagram text-indigo-500 mr-3"></i>Build Your Word Network</h2>
+                         <p className="text-slate-600 mb-6">Learning words in isolation is hard. Connect new vocabulary to words you already know to build a semantic network in your brain.</p>
+                         
+                         <div className="flex flex-wrap gap-4 mb-8 justify-center">
+                             <button onClick={() => setActiveMethod('mindMap')} className={`px-6 py-3 rounded-lg font-bold transition-all ${activeMethod === 'mindMap' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>1. Mind Map</button>
+                             <button onClick={() => setActiveMethod('collocations')} className={`px-6 py-3 rounded-lg font-bold transition-all ${activeMethod === 'collocations' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>2. Collocations</button>
+                             <button onClick={() => setActiveMethod('frayer')} className={`px-6 py-3 rounded-lg font-bold transition-all ${activeMethod === 'frayer' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>3. Frayer Model</button>
+                         </div>
+
+                         {activeMethod === 'mindMap' && (
+                             <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-100 animate-fade-in">
+                                 <h3 className="text-xl font-bold text-indigo-800 mb-4">The Brain Web Method</h3>
+                                 <p className="mb-4 text-slate-700">Select a target word to explore its network of synonyms and related concepts.</p>
+                                 <div className="flex gap-2 mb-6 flex-wrap">
+                                     {mindMapWords.map(w => (
+                                         <button key={w} onClick={() => setSelectedWord(w)} className={`px-4 py-2 rounded-full font-semibold border ${selectedWord === w ? 'bg-indigo-500 text-white border-indigo-600' : 'bg-white text-indigo-600 border-indigo-200 hover:bg-indigo-100'}`}>
+                                             {w}
+                                         </button>
+                                     ))}
+                                 </div>
+                                 
+                                 {selectedWord && mindMapData[selectedWord] && (
+                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                                         <div className="bg-white p-4 rounded-lg shadow border border-slate-200 text-center">
+                                             <h4 className="font-bold text-slate-500 uppercase tracking-wider text-xs mb-3">Synonyms</h4>
+                                             <ul className="space-y-2">
+                                                 {(mindMapData[selectedWord].synonyms || []).map((s, i) => <li key={i} className="bg-slate-50 p-2 rounded text-slate-800 font-medium">{s}</li>)}
+                                             </ul>
+                                         </div>
+                                         <div className="bg-indigo-500 p-4 rounded-lg shadow-lg flex items-center justify-center transform scale-105 z-10">
+                                              <h3 className="text-2xl font-black text-white text-center">{selectedWord}</h3>
+                                         </div>
+                                         <div className="bg-white p-4 rounded-lg shadow border border-slate-200 text-center">
+                                              <h4 className="font-bold text-slate-500 uppercase tracking-wider text-xs mb-3">Context / Objects</h4>
+                                              <ul className="space-y-2">
+                                                  {(mindMapData[selectedWord].objects || mindMapData[selectedWord].context || []).map((s, i) => <li key={i} className="bg-slate-50 p-2 rounded text-slate-800 font-medium">{s}</li>)}
+                                              </ul>
+                                         </div>
+                                     </div>
+                                 )}
+                             </div>
+                         )}
+
+                         {activeMethod === 'collocations' && (
+                             <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-100 animate-fade-in">
+                                  <h3 className="text-xl font-bold text-indigo-800 mb-4">Collocation Grouping</h3>
+                                  <p className="mb-6 text-slate-700">Learn what words naturally pair together to improve fluency and avoid translation errors.</p>
+                                  
+                                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                      {collocationData.map((data, index) => (
+                                          <div key={index} className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                                              <div className="bg-slate-800 text-white font-bold p-2 text-center text-md">{data.root} + ...</div>
+                                              <ul className="p-3 space-y-2 text-sm">
+                                                  {data.collocations.map((c, i) => (
+                                                      <li key={i} className="flex items-center text-slate-700 font-medium">
+                                                          <i className="fas fa-link text-indigo-300 mr-2 text-xs"></i> {data.root.toLowerCase()} {c}
+                                                      </li>
+                                                  ))}
+                                              </ul>
+                                          </div>
+                                      ))}
+                                  </div>
+                             </div>
+                         )}
+
+                         {activeMethod === 'frayer' && (
+                              <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-100 animate-fade-in">
+                                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                                      <div>
+                                          <h3 className="text-xl font-bold text-indigo-800 mb-2">The Frayer Model</h3>
+                                          <p className="text-slate-700 text-sm">A concept map for mastering complex vocabulary. Select a word below to see its breakdown.</p>
+                                      </div>
+                                      <select 
+                                          value={selectedFrayerWord} 
+                                          onChange={(e) => setSelectedFrayerWord(e.target.value)}
+                                          className="mt-4 md:mt-0 p-2 rounded-lg border-2 border-indigo-300 bg-white text-indigo-800 font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                      >
+                                          {Object.keys(frayerData).map(word => (
+                                              <option key={word} value={word}>{word}</option>
+                                          ))}
+                                      </select>
+                                  </div>
+                                  
+                                  {currentFrayerData && (
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto relative mt-8">
+                                          <div className="bg-white p-5 md:rounded-tl-2xl md:rounded-bl-sm md:rounded-tr-sm md:rounded-br-sm rounded-t-2xl border-2 border-indigo-200 shadow-sm relative z-0">
+                                               <h4 className="font-bold text-indigo-600 mb-2 uppercase text-xs tracking-wider">Definition</h4>
+                                               <p className="text-slate-700 font-medium">{currentFrayerData.definition}</p>
+                                          </div>
+                                          <div className="bg-white p-5 md:rounded-tr-2xl md:rounded-bl-sm md:rounded-tl-sm md:rounded-br-sm border-2 border-indigo-200 shadow-sm relative z-0">
+                                               <h4 className="font-bold text-indigo-600 mb-2 uppercase text-xs tracking-wider">Characteristics</h4>
+                                               <ul className="list-disc list-inside text-slate-700 space-y-1 text-sm">
+                                                   {(currentFrayerData.characteristics || []).map((c, i) => <li key={i}>{c}</li>)}
+                                               </ul>
+                                          </div>
+                                          
+                                          {/* Center target word - hidden on very small screens for layout reasons, shown on md+ */}
+                                          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-600 text-white font-black text-xl px-6 py-3 rounded-full shadow-lg z-10 border-4 border-indigo-50 items-center justify-center text-center">
+                                              {currentFrayerData.word}
+                                          </div>
+
+                                          <div className="bg-white p-5 md:rounded-bl-2xl md:rounded-tl-sm md:rounded-tr-sm md:rounded-br-sm border-2 border-indigo-200 shadow-sm md:mt-4 relative z-0">
+                                               <h4 className="font-bold text-emerald-600 mb-2 uppercase text-xs tracking-wider">Examples</h4>
+                                               <ul className="list-disc list-inside text-slate-700 space-y-2 text-sm italic">
+                                                   {(currentFrayerData.examples || []).map((c, i) => <li key={i}>{c}</li>)}
+                                               </ul>
+                                          </div>
+                                          <div className="bg-white p-5 md:rounded-br-2xl md:rounded-tl-sm md:rounded-bl-sm md:rounded-tr-sm rounded-b-2xl border-2 border-indigo-200 shadow-sm md:mt-4 relative z-0">
+                                               <h4 className="font-bold text-red-500 mb-2 uppercase text-xs tracking-wider">Non-Examples / Opposites</h4>
+                                                <ul className="list-disc list-inside text-slate-700 space-y-1 text-sm">
+                                                   {(currentFrayerData.nonExamples || []).map((c, i) => <li key={i}>{c}</li>)}
+                                               </ul>
+                                          </div>
+                                      </div>
+                                  )}
+                              </div>
+                         )}
+                     </div>
+                 </div>
+             );
+        };
+
         const App = () => {
             const [activeTab, setActiveTab] = useState('idioms');
             const [viewMode, setViewMode] = useState('focus'); 
@@ -317,11 +579,11 @@
                                 <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500 mb-1">
                                     Unit 7: Why do colors matter?
                                 </h1>
-                                <p className="text-lg text-slate-500 font-medium">Interactive Vocabulary Showcase & Quiz</p>
+                                <p className="text-lg text-slate-500 font-medium">Interactive Vocabulary Showcase</p>
                             </div>
                             
-                            {/* Hide View Toggles if in Quiz Tab */}
-                            {activeTab !== 'quiz' && (
+                            {/* Hide View Toggles if in Quiz or Network Tab */}
+                            {(activeTab !== 'quiz' && activeTab !== 'network') && (
                                 <div className="flex bg-slate-100 p-1 rounded-lg">
                                     <button onClick={() => setViewMode('focus')} className={`px-4 py-2 rounded-md font-semibold text-sm transition-colors ${viewMode === 'focus' ? 'bg-white text-blue-600 shadow' : 'text-slate-500 hover:text-slate-700'}`}>
                                         <i className="fas fa-chalkboard mr-2"></i> Board View
@@ -347,13 +609,18 @@
                                 <span className="text-xl mr-2">🌍</span> Environment Verbs
                             </button>
                             <div className="w-px bg-slate-300 mx-2 hidden sm:block"></div>
-                            <button onClick={() => setActiveTab('quiz')} className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'quiz' ? 'bg-indigo-50 border-indigo-500 text-indigo-700 shadow-md transform scale-105' : 'bg-slate-800 border-transparent text-white hover:bg-slate-700 shadow-md'}`}>
+                             <button onClick={() => setActiveTab('network')} className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'network' ? 'bg-indigo-50 border-indigo-500 text-indigo-700 shadow-md transform scale-105' : 'bg-slate-100 border-transparent text-slate-600 hover:bg-slate-200 shadow-sm'}`}>
+                                <i className="fas fa-project-diagram mr-2"></i> Word Networks
+                            </button>
+                            <button onClick={() => setActiveTab('quiz')} className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'quiz' ? 'bg-slate-800 border-slate-800 text-white shadow-md transform scale-105' : 'bg-slate-800 border-transparent text-white hover:bg-slate-700 shadow-md'}`}>
                                 <i className="fas fa-brain mr-2"></i> Practice Quiz
                             </button>
                         </div>
 
                         {/* Content Area */}
-                        {activeTab === 'quiz' ? (
+                        {activeTab === 'network' ? (
+                            <WordNetworkBuilder />
+                        ) : activeTab === 'quiz' ? (
                             <Quiz />
                         ) : viewMode === 'grid' ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
