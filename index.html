@@ -126,6 +126,14 @@
              const [selectedWord, setSelectedWord] = useState('');
              const [selectedFrayerWord, setSelectedFrayerWord] = useState('Kill off');
              
+             // Network Practice States
+             const [pqCurrent, setPqCurrent] = useState(0);
+             const [pqScore, setPqScore] = useState(0);
+             const [pqShowResult, setPqShowResult] = useState(false);
+             const [pqSelectedAnswer, setPqSelectedAnswer] = useState(null);
+             const [pqStarted, setPqStarted] = useState(false);
+             const [pqQuestions, setPqQuestions] = useState([]);
+             
              const mindMapWords = ["dispose of", "significant", "gray area", "feeling blue"];
              
              const mindMapData = {
@@ -163,173 +171,151 @@
              ];
 
              const frayerData = {
+                 // PHRASAL VERBS (11)
                  "Kill off": {
-                     word: "Kill off",
-                     definition: "To destroy a whole species or population completely.",
-                     characteristics: ["Usually referring to animals/plants", "Implies a large scale", "Often caused by pollution or disease"],
-                     examples: ["Chemical pollution in the river could completely kill off the local fish.", "The use of pesticides is killing off the bee population."],
-                     nonExamples: ["Saving an endangered species", "A single animal dying naturally", "Protecting a habitat"]
+                     word: "Kill off", definition: "To destroy a whole species or population completely.", characteristics: ["Usually referring to animals/plants", "Implies a large scale", "Often caused by pollution or disease"], examples: ["Chemical pollution in the river could completely kill off the local fish.", "The use of pesticides is killing off the bee population."], nonExamples: ["Saving an endangered species", "A single animal dying naturally", "Protecting a habitat"]
                  },
                  "Get rid of": {
-                     word: "Get rid of",
-                     definition: "To throw away, sell, or destroy something you do not want anymore.",
-                     characteristics: ["Informal and common", "Implies wanting something gone", "Can be objects or abstract things"],
-                     examples: ["I need to get rid of these old clothes.", "We finally got rid of the mice in the basement."],
-                     nonExamples: ["Keeping something", "Collecting items", "Holding onto a memory"]
+                     word: "Get rid of", definition: "To throw away, sell, or destroy something you do not want anymore.", characteristics: ["Informal and common", "Implies wanting something gone", "Can be objects or abstract things"], examples: ["I need to get rid of these old clothes.", "We finally got rid of the mice in the basement."], nonExamples: ["Keeping something", "Collecting items", "Holding onto a memory"]
                  },
                  "Dispose of": {
-                     word: "Dispose of",
-                     definition: "To throw away or get rid of something, often in a careful or responsible way.",
-                     characteristics: ["More formal than 'get rid of'", "Often relates to hazardous materials or waste", "Implies a proper procedure"],
-                     examples: ["How should we properly dispose of these old batteries?", "The company was fined for illegally disposing of toxic waste."],
-                     nonExamples: ["Littering", "Hoarding", "Keeping something"]
+                     word: "Dispose of", definition: "To throw away or get rid of something, often in a careful or responsible way.", characteristics: ["More formal than 'get rid of'", "Often relates to hazardous materials or waste", "Implies a proper procedure"], examples: ["How should we properly dispose of these old batteries?", "The company was fined for illegally disposing of toxic waste."], nonExamples: ["Littering", "Hoarding", "Keeping something"]
                  },
                  "Break down": {
-                     word: "Break down",
-                     definition: "To separate into simpler substances (decompose) OR to stop working.",
-                     characteristics: ["Can mean decay (biology/environment) or mechanical failure", "Happens over time or suddenly"],
-                     examples: ["Plastic bags take hundreds of years to break down.", "My car broke down on the highway."],
-                     nonExamples: ["Building something up", "Functioning perfectly", "Preserving"]
+                     word: "Break down", definition: "To separate into simpler substances (decompose) OR to stop working.", characteristics: ["Can mean decay (biology/environment) or mechanical failure", "Happens over time or suddenly"], examples: ["Plastic bags take hundreds of years to break down.", "My car broke down on the highway."], nonExamples: ["Building something up", "Functioning perfectly", "Preserving"]
                  },
                  "Build up": {
-                     word: "Build up",
-                     definition: "To accumulate or increase over time.",
-                     characteristics: ["Often happens gradually", "Can be physical (dirt) or abstract (pressure/tension)"],
-                     examples: ["Plaque can build up on your teeth if you don't brush.", "Stress has been building up before the exams."],
-                     nonExamples: ["Decreasing", "Disappearing quickly", "Breaking down"]
+                     word: "Build up", definition: "To accumulate or increase over time.", characteristics: ["Often happens gradually", "Can be physical (dirt) or abstract (pressure/tension)"], examples: ["Plaque can build up on your teeth if you don't brush.", "Stress has been building up before the exams."], nonExamples: ["Decreasing", "Disappearing quickly", "Breaking down"]
                  },
                  "Stick around": {
-                     word: "Stick around",
-                     definition: "To stay somewhere for a period of time, often waiting for something.",
-                     characteristics: ["Informal", "Implies lingering or remaining"],
-                     examples: ["If you stick around after the show, you might meet the band.", "I think I'll stick around and see what happens next."],
-                     nonExamples: ["Leaving immediately", "Departing quickly", "Running away"]
+                     word: "Stick around", definition: "To stay somewhere for a period of time, often waiting for something.", characteristics: ["Informal", "Implies lingering or remaining"], examples: ["If you stick around after the show, you might meet the band.", "I think I'll stick around and see what happens next."], nonExamples: ["Leaving immediately", "Departing quickly", "Running away"]
                  },
                  "Cut down on": {
-                     word: "Cut down on",
-                     definition: "To reduce the size, amount, or number of something.",
-                     characteristics: ["Often used with diet, expenses, or bad habits", "Implies intentional reduction"],
-                     examples: ["I'm trying to cut down on sugar to eat healthier.", "The company needs to cut down on its travel expenses."],
-                     nonExamples: ["Increasing consumption", "Adding to something", "Indulging"]
+                     word: "Cut down on", definition: "To reduce the size, amount, or number of something.", characteristics: ["Often used with diet, expenses, or bad habits", "Implies intentional reduction"], examples: ["I'm trying to cut down on sugar to eat healthier.", "The company needs to cut down on its travel expenses."], nonExamples: ["Increasing consumption", "Adding to something", "Indulging"]
                  },
                  "Run out of": {
-                     word: "Run out of",
-                     definition: "To use up all of a supply of something so there is none left.",
-                     characteristics: ["Implies depletion", "Can be tangible (milk) or intangible (time/patience)"],
-                     examples: ["We ran out of milk this morning.", "I'm running out of patience with this slow computer."],
-                     nonExamples: ["Stockpiling", "Having plenty of something", "Replenishing"]
+                     word: "Run out of", definition: "To use up all of a supply of something so there is none left.", characteristics: ["Implies depletion", "Can be tangible (milk) or intangible (time/patience)"], examples: ["We ran out of milk this morning.", "I'm running out of patience with this slow computer."], nonExamples: ["Stockpiling", "Having plenty of something", "Replenishing"]
                  },
                  "Come up with": {
-                     word: "Come up with",
-                     definition: "To think of an idea, plan, or solution.",
-                     characteristics: ["Involves creativity or problem-solving", "Often used in meetings or brainstorming"],
-                     examples: ["We need to come up with a better marketing strategy.", "She came up with a brilliant excuse for being late."],
-                     nonExamples: ["Forgetting", "Lacking ideas", "Giving up"]
+                     word: "Come up with", definition: "To think of an idea, plan, or solution.", characteristics: ["Involves creativity or problem-solving", "Often used in meetings or brainstorming"], examples: ["We need to come up with a better marketing strategy.", "She came up with a brilliant excuse for being late."], nonExamples: ["Forgetting", "Lacking ideas", "Giving up"]
                  },
                  "Speed up": {
-                     word: "Speed up",
-                     definition: "To move or happen faster, or to cause something to do so.",
-                     characteristics: ["Relates to velocity or time", "Can be physical movement or a process"],
-                     examples: ["We need to speed up the manufacturing process.", "The car sped up as it merged onto the highway."],
-                     nonExamples: ["Slowing down", "Delaying", "Pausing"]
+                     word: "Speed up", definition: "To move or happen faster, or to cause something to do so.", characteristics: ["Relates to velocity or time", "Can be physical movement or a process"], examples: ["We need to speed up the manufacturing process.", "The car sped up as it merged onto the highway."], nonExamples: ["Slowing down", "Delaying", "Pausing"]
                  },
                  "Go through": {
-                     word: "Go through",
-                     definition: "To consume or use up a lot of something, OR to experience a difficult situation.",
-                     characteristics: ["Can mean physical consumption or emotional endurance"],
-                     examples: ["We go through a gallon of milk a week.", "She's going through a tough time right now."],
-                     nonExamples: ["Conserving", "Avoiding a situation", "Saving"]
+                     word: "Go through", definition: "To consume or use up a lot of something, OR to experience a difficult situation.", characteristics: ["Can mean physical consumption or emotional endurance"], examples: ["We go through a gallon of milk a week.", "She's going through a tough time right now."], nonExamples: ["Conserving", "Avoiding a situation", "Saving"]
                  },
+                 
+                 // IDIOMS (6)
                  "See red": {
-                     word: "See red",
-                     definition: "To become very angry suddenly.",
-                     characteristics: ["An idiom", "Implies a loss of control due to anger"],
-                     examples: ["When he insulted my friend, I just saw red.", "Traffic jams always make me see red."],
-                     nonExamples: ["Staying calm", "Feeling peaceful", "Being indifferent"]
+                     word: "See red", definition: "To become very angry suddenly.", characteristics: ["An idiom", "Implies a sudden loss of control due to anger"], examples: ["When he insulted my friend, I just saw red.", "Traffic jams always make me see red."], nonExamples: ["Staying calm", "Feeling peaceful", "Being indifferent"]
                  },
                  "A gray area": {
-                     word: "A gray area",
-                     definition: "A situation that is not clear or where the rules are not known.",
-                     characteristics: ["An idiom", "Relates to ambiguity or lack of clarity"],
-                     examples: ["The legality of that software is a bit of a gray area.", "Dress codes can sometimes be a gray area."],
-                     nonExamples: ["Black and white rules", "Absolute certainty", "Clear guidelines"]
+                     word: "A gray area", definition: "A situation that is not clear or where the rules are not known.", characteristics: ["An idiom", "Relates to ambiguity or lack of clarity"], examples: ["The legality of that software is a bit of a gray area.", "Dress codes can sometimes be a gray area."], nonExamples: ["Black and white rules", "Absolute certainty", "Clear guidelines"]
                  },
                  "Feeling blue": {
-                     word: "Feeling blue",
-                     definition: "Feeling sad or depressed.",
-                     characteristics: ["An idiom", "Relates to sadness"],
-                     examples: ["I was feeling blue after failing my math test, so my friends took me out for pizza."],
-                     nonExamples: ["Feeling happy", "Being joyful", "Seeing red"]
+                     word: "Feeling blue", definition: "Feeling sad or depressed.", characteristics: ["An idiom", "Relates to sadness and melancholy"], examples: ["I was feeling blue after failing my math test, so my friends took me out for pizza."], nonExamples: ["Feeling happy", "Being joyful", "Seeing red"]
                  },
                  "On the black market": {
-                     word: "On the black market",
-                     definition: "Bought or sold illegally.",
-                     characteristics: ["An idiom", "Relates to illegal trade"],
-                     examples: ["He bought the sold-out concert tickets on the black market and ended up getting scammed."],
-                     nonExamples: ["Buying legally", "Purchasing at a store", "Being a gray area"]
+                     word: "On the black market", definition: "Bought or sold illegally.", characteristics: ["An idiom", "Relates to illegal, unregulated trade"], examples: ["He bought the sold-out concert tickets on the black market and ended up getting scammed."], nonExamples: ["Buying legally", "Purchasing at a licensed store", "Following the rules"]
                  },
                  "Green with envy": {
-                     word: "Green with envy",
-                     definition: "Very jealous of someone else's success or belongings.",
-                     characteristics: ["An idiom", "Relates to jealousy"],
-                     examples: ["I was green with envy when my best friend got the newest iPhone for her birthday."],
-                     nonExamples: ["Being happy for someone", "Being indifferent", "Feeling blue"]
+                     word: "Green with envy", definition: "Very jealous of someone else's success or belongings.", characteristics: ["An idiom", "Relates to intense jealousy"], examples: ["I was green with envy when my best friend got the newest iPhone for her birthday."], nonExamples: ["Being happy for someone", "Being indifferent", "Feeling proud of someone"]
                  },
                  "A white-knuckle ride": {
-                     word: "A white-knuckle ride",
-                     definition: "A thrilling or terrifying experience.",
-                     characteristics: ["An idiom", "Relates to fear or excitement"],
-                     examples: ["The new rollercoaster at the theme park was a total white-knuckle ride!"],
-                     nonExamples: ["A boring experience", "A relaxing time", "A gray area"]
+                     word: "A white-knuckle ride", definition: "A thrilling or terrifying experience.", characteristics: ["An idiom", "Relates to fear or extreme excitement (gripping tight)"], examples: ["The new rollercoaster at the theme park was a total white-knuckle ride!"], nonExamples: ["A boring experience", "A relaxing walk", "A predictable outcome"]
                  },
+
+                 // WORD FAMILIES (7)
                  "Strong → Strength": {
-                     word: "Strong → Strength",
-                     definition: "Strong (Adj): Having physical or mental power. Strength (Noun): The quality of being strong.",
-                     characteristics: ["Word family", "Relates to power"],
-                     examples: ["You need to be mentally strong to deal with cyberbullying. (Adj)", "It takes a lot of inner strength to stand up to a bully at school. (Noun)"],
-                     nonExamples: ["Weak", "Weakness", "Thick → Thickness"]
+                     word: "Strong/Strength", definition: "Strong (Adj): Having physical or mental power. Strength (Noun): The quality of being strong.", characteristics: ["Word family", "Relates to capacity and power"], examples: ["You need to be mentally strong. (Adj)", "It takes a lot of inner strength. (Noun)"], nonExamples: ["Weak", "Weakness", "Fragile"]
                  },
                  "Possible → Possibility": {
-                     word: "Possible → Possibility",
-                     definition: "Possible (Adj): A chance that something might happen. Possibility (Noun): The state of being possible.",
-                     characteristics: ["Word family", "Relates to chance"],
-                     examples: ["Is it possible to finish this entire group project in one night? (Adj)", "There's a strong possibility that our school trip will be canceled because of the storm. (Noun)"],
-                     nonExamples: ["Impossible", "Impossibility", "Creative → Creativity"]
+                     word: "Possible/Possibility", definition: "Possible (Adj): A chance that something might happen. Possibility (Noun): The state of being possible.", characteristics: ["Word family", "Relates to chance and feasibility"], examples: ["Is it possible to finish this? (Adj)", "There's a strong possibility it will rain. (Noun)"], nonExamples: ["Impossible", "Impossibility", "Certainty"]
                  },
                  "Significant → Significance": {
-                     word: "Significant → Significance",
-                     definition: "Significant (Adj): Importance or meaning. Significance (Noun): The quality of being significant.",
-                     characteristics: ["Word family", "Relates to importance"],
-                     examples: ["The new eco-friendly laws will have a significant impact on how we recycle plastic. (Adj)", "Do you understand the significance of this exam for your college applications? (Noun)"],
-                     nonExamples: ["Insignificant", "Insignificance", "Prior → Priority"]
+                     word: "Significant/Significance", definition: "Significant (Adj): Important or meaningful. Significance (Noun): The quality of being significant.", characteristics: ["Word family", "Relates to importance and impact"], examples: ["This will have a significant impact. (Adj)", "Do you understand the significance? (Noun)"], nonExamples: ["Insignificant", "Insignificance", "Trivial"]
                  },
                  "Prior → Priority": {
-                     word: "Prior → Priority",
-                     definition: "Prior (Adj): Existing or coming before in time. Priority (Noun): Something that is more important than other things.",
-                     characteristics: ["Word family", "Relates to importance over time"],
-                     examples: ["I can't go to the movies tonight because I have a prior commitment with my study group. (Adj)", "My top priority this weekend is finishing my science project before I play any video games. (Noun)"],
-                     nonExamples: ["Subsequent", "Unimportant", "Significant → Significance"]
+                     word: "Prior → Priority", definition: "Prior (Adj): Existing before in time. Priority (Noun): Something that is more important than other things.", characteristics: ["Word family", "Relates to order of importance and time"], examples: ["I have a prior commitment. (Adj)", "This project is my top priority. (Noun)"], nonExamples: ["Subsequent", "Unimportant", "Last resort"]
                  },
                  "Thick → Thickness": {
-                     word: "Thick → Thickness",
-                     definition: "Thick (Adj): How wide or deep something is. Thickness (Noun): The state of being thick.",
-                     characteristics: ["Word family", "Relates to dimensions"],
-                     examples: ["The fog was so thick this morning that the school bus was delayed. (Adj)", "The thickness of the ice on the lake isn't safe enough for skating yet. (Noun)"],
-                     nonExamples: ["Thin", "Thinness", "Strong → Strength"]
+                     word: "Thick → Thickness", definition: "Thick (Adj): How wide or deep something is. Thickness (Noun): The state or measure of being thick.", characteristics: ["Word family", "Relates to physical dimensions"], examples: ["The fog was very thick. (Adj)", "Check the thickness of the ice. (Noun)"], nonExamples: ["Thin", "Thinness", "Narrow"]
                  },
                  "Creative → Creativity": {
-                     word: "Creative → Creativity",
-                     definition: "Creative (Adj): Having the ability to invent new things or ideas. Creativity (Noun): The use of the imagination to create something.",
-                     characteristics: ["Word family", "Relates to invention"],
-                     examples: ["She is incredibly creative and always designs the best posters for the school play. (Adj)", "You need a lot of creativity to design a viral TikTok video. (Noun)"],
-                     nonExamples: ["Unimaginative", "Lack of creativity", "Possible → Possibility"]
+                     word: "Creative → Creativity", definition: "Creative (Adj): Having the ability to invent new things. Creativity (Noun): The use of the imagination.", characteristics: ["Word family", "Relates to invention and art"], examples: ["She is incredibly creative. (Adj)", "You need a lot of creativity for this. (Noun)"], nonExamples: ["Unimaginative", "Lack of imagination", "Boring"]
                  },
                  "Sick → Sickness": {
-                     word: "Sick → Sickness",
-                     definition: "Sick (Adj): An illness or poor health condition. Sickness (Noun): The state of being ill.",
-                     characteristics: ["Word family", "Relates to health"],
-                     examples: ["I feel too sick to go to school today, so I'm going to rest in bed. (Adj)", "Because of the sudden sickness spreading in class, half the students are absent today. (Noun)"],
-                     nonExamples: ["Healthy", "Health", "Creative → Creativity"]
+                     word: "Sick → Sickness", definition: "Sick (Adj): An illness or poor health condition. Sickness (Noun): The state of being ill.", characteristics: ["Word family", "Relates to health and well-being"], examples: ["I feel too sick to go to school. (Adj)", "A sudden sickness is spreading in class. (Noun)"], nonExamples: ["Healthy", "Health", "Well"]
+                 }
+             };
+
+             const networkQuestionsData = [
+                 // Synonyms / Substitutions
+                 { prompt: "Which phrase is the closest synonym in the network for 'accumulate' or 'gather'?", options: ["build up", "break down", "dispose of", "go through"], correct: "build up", feedback: "Synonym Network: 'Build up', 'accumulate', and 'gather' are part of the same semantic web." },
+                 { prompt: "Which phrase belongs in the same synonym network as 'invent' or 'think of'?", options: ["come up with", "stick around", "cut down on", "run out of"], correct: "come up with", feedback: "Synonym Network: To 'come up with' an idea is to invent or formulate it." },
+                 { prompt: "Which idiom belongs in the same emotion category as 'furious' and 'enraged'?", options: ["see red", "feeling blue", "green with envy", "a gray area"], correct: "see red", feedback: "Emotion Network: 'Seeing red' is a strong idiom for extreme anger." },
+                 { prompt: "Which idiom is semantically related to 'melancholy' and 'depressed'?", options: ["feeling blue", "seeing red", "white-knuckle ride", "green with envy"], correct: "feeling blue", feedback: "Emotion Network: 'Feeling blue' connects directly to sadness." },
+                 { prompt: "Which idiom connects to the feeling of 'jealousy' or 'wanting what others have'?", options: ["green with envy", "feeling blue", "see red", "a gray area"], correct: "green with envy", feedback: "Emotion Network: Green is the classic color associated with jealousy in English." },
+                 // Context / Categories
+                 { prompt: "Which phrase fits into a contextual map of 'adrenaline, fear, and amusement parks'?", options: ["a white-knuckle ride", "on the black market", "a gray area", "dispose of"], correct: "a white-knuckle ride", feedback: "Context Web: A 'white-knuckle ride' implies gripping the safety bars so tight your knuckles turn white." },
+                 { prompt: "Which idiom belongs in the category of 'unregulated trade and illegality'?", options: ["on the black market", "a gray area", "see red", "kill off"], correct: "on the black market", feedback: "Context Web: The 'black market' refers to illegal economic activity." },
+                 { prompt: "Which idiom fits the context map for 'ambiguity, lack of clarity, and unclear rules'?", options: ["a gray area", "white-knuckle ride", "green with envy", "feeling blue"], correct: "a gray area", feedback: "Context Web: A 'gray area' is neither black nor white; it's unclear." },
+                 // Collocations
+                 { prompt: "Which root word forms a strong collocation with 'impact', 'difference', and 'contribution'?", options: ["significant", "strong", "thick", "possible"], correct: "significant", feedback: "Collocation: We often say a 'significant impact' or 'significant difference'." },
+                 { prompt: "Which root word naturally pairs with 'evidence', 'coffee', and 'influence'?", options: ["strong", "significant", "prior", "creative"], correct: "strong", feedback: "Collocation: 'Strong coffee' and 'strong evidence' are deeply ingrained collocations." },
+                 { prompt: "Which root word naturally collocates with 'fog', 'accent', and 'skin'?", options: ["thick", "strong", "sick", "creative"], correct: "thick", feedback: "Collocation: 'Thick fog' and 'thick accent' are common adjective-noun pairs." },
+                 { prompt: "Which root word frequently pairs with 'notice', 'experience', and 'engagement'?", options: ["prior", "possible", "significant", "thick"], correct: "prior", feedback: "Collocation: We often speak of 'prior notice' before an event." },
+                 { prompt: "Which root word forms collocations like '___ leave', '___ pay', and '___ note'?", options: ["sick", "prior", "strong", "creative"], correct: "sick", feedback: "Collocation: 'Sick leave' and 'sick pay' are standard workplace terms." },
+                 { prompt: "Which root word collocates with 'director', 'writing', and 'process'?", options: ["creative", "significant", "possible", "strong"], correct: "creative", feedback: "Collocation: 'Creative writing' and 'creative process' are common conceptual pairs." },
+                 // Antonyms / Non-examples (Frayer Model attributes)
+                 { prompt: "In a semantic network, which is the direct opposite (antonym) of 'replenish' or 'stockpile'?", options: ["run out of", "build up", "stick around", "go through"], correct: "run out of", feedback: "Antonym Map: To 'run out of' something means to deplete it entirely." },
+                 { prompt: "What is the semantic opposite of 'slow down' or 'delay'?", options: ["speed up", "break down", "cut down on", "dispose of"], correct: "speed up", feedback: "Antonym Map: 'Speed up' directly contrasts with 'slow down'." },
+                 { prompt: "According to a Frayer Model, which would be a 'non-example' of 'a gray area'?", options: ["Strict, black-and-white rules", "An ambiguous law", "An unclear boundary", "An undefined situation"], correct: "Strict, black-and-white rules", feedback: "Frayer Model: Strict rules are the opposite (non-example) of a gray area." },
+                 { prompt: "Which vocabulary word is the opposite of 'conserving' or 'saving' supplies?", options: ["go through", "build up", "speed up", "stick around"], correct: "go through", feedback: "Antonym Map: 'Going through' supplies implies using them up." },
+                 { prompt: "In a Frayer Model for 'kill off', which phrase represents a 'non-example'?", options: ["Protecting a habitat", "Destroying a species", "Wiping out a population", "Causing extinction"], correct: "Protecting a habitat", feedback: "Frayer Model: Protecting a habitat is the exact opposite of killing off a species." },
+                 // Grammar / Syntactic Map
+                 { prompt: "'Creative' maps to 'Creativity'. What does 'Strong' map to?", options: ["Strength", "Strongness", "Strongly", "Strengthen"], correct: "Strength", feedback: "Word Families: The noun form of 'strong' is 'strength'." },
+                 { prompt: "'Possible' maps to 'Possibility'. What does 'Significant' map to?", options: ["Significance", "Significantly", "Signify", "Signification"], correct: "Significance", feedback: "Word Families: The noun form of 'significant' is 'significance'." },
+                 { prompt: "Which noun completes the web for something of great importance before everything else? 'Top ___'", options: ["priority", "possibility", "significance", "creativity"], correct: "priority", feedback: "Context Web: A 'top priority' is your most important task." },
+                 // Advanced Concept Mapping
+                 { prompt: "Which phrasal verb fits the concept web: 'Plastics, oceans, decompose, hundreds of years'?", options: ["break down", "build up", "dispose of", "kill off"], correct: "break down", feedback: "Concept Map: 'Break down' is the process of decomposition." },
+                 { prompt: "Which phrasal verb fits the concept web: 'Trash, hazardous waste, recycling bins, responsible removal'?", options: ["dispose of", "get rid of", "go through", "run out of"], correct: "dispose of", feedback: "Concept Map: 'Dispose of' is the formal term for responsible waste removal." },
+                 { prompt: "Which phrase maps to the concept of 'intentional reduction over time' (like a diet or expenses)?", options: ["cut down on", "run out of", "break down", "kill off"], correct: "cut down on", feedback: "Concept Map: To 'cut down on' implies a deliberate choice to use less." },
+                 { prompt: "Which phrase conceptually maps to 'lingering, waiting, and remaining in a place'?", options: ["stick around", "build up", "speed up", "come up with"], correct: "stick around", feedback: "Concept Map: 'Sticking around' means you aren't leaving yet." },
+                 { prompt: "Which informal term conceptually maps to 'throwing away old clothes, catching mice, unwanted items'?", options: ["get rid of", "dispose of", "go through", "break down"], correct: "get rid of", feedback: "Concept Map: 'Get rid of' is the most common informal way to say remove/discard." },
+                 { prompt: "Which phrase conceptually means 'to destroy a whole population', often referring to nature?", options: ["kill off", "dispose of", "break down", "get rid of"], correct: "kill off", feedback: "Concept Map: 'Kill off' implies destruction on a mass scale." },
+                 { prompt: "Which idiom refers to an experience that makes you 'grip tightly in fear'?", options: ["a white-knuckle ride", "seeing red", "feeling blue", "a gray area"], correct: "a white-knuckle ride", feedback: "Concept Map: White knuckles literally happen when you grip something hard out of fear." },
+                 { prompt: "Which phrase implies 'experiencing a difficult emotional situation' or 'using a lot of a physical item'?", options: ["go through", "break down", "cut down on", "stick around"], correct: "go through", feedback: "Concept Map: 'Go through' has both a physical (consuming) and emotional (experiencing) network." }
+             ];
+
+             const startPracticeQuiz = () => {
+                 const shuffled = [...networkQuestionsData].sort(() => 0.5 - Math.random());
+                 const randomizedOptions = shuffled.map(q => {
+                     return { ...q, options: [...q.options].sort(() => 0.5 - Math.random()) }
+                 });
+                 setPqQuestions(randomizedOptions);
+                 setPqCurrent(0);
+                 setPqScore(0);
+                 setPqShowResult(false);
+                 setPqSelectedAnswer(null);
+                 setPqStarted(true);
+             };
+
+             const handlePqAnswer = (option) => {
+                 if (pqSelectedAnswer) return; 
+                 setPqSelectedAnswer(option);
+                 if (option === pqQuestions[pqCurrent].correct) {
+                     setPqScore(pqScore + 1);
+                 }
+             };
+
+             const nextPqQuestion = () => {
+                 if (pqCurrent + 1 < pqQuestions.length) {
+                     setPqCurrent(pqCurrent + 1);
+                     setPqSelectedAnswer(null);
+                 } else {
+                     setPqShowResult(true);
                  }
              };
 
@@ -341,10 +327,11 @@
                          <h2 className="text-3xl font-bold text-slate-800 mb-4"><i className="fas fa-project-diagram text-indigo-500 mr-3"></i>Build Your Word Network</h2>
                          <p className="text-slate-600 mb-6">Connect new vocabulary to words you already know to build a powerful semantic network.</p>
                          
-                         <div className="flex flex-wrap gap-4 mb-8 justify-center">
-                             <button onClick={() => setActiveMethod('mindMap')} className={`px-6 py-3 rounded-lg font-bold transition-all ${activeMethod === 'mindMap' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>1. Mind Map</button>
-                             <button onClick={() => setActiveMethod('collocations')} className={`px-6 py-3 rounded-lg font-bold transition-all ${activeMethod === 'collocations' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>2. Collocations</button>
-                             <button onClick={() => setActiveMethod('frayer')} className={`px-6 py-3 rounded-lg font-bold transition-all ${activeMethod === 'frayer' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>3. Frayer Model</button>
+                         <div className="flex flex-wrap gap-3 mb-8 justify-center">
+                             <button onClick={() => setActiveMethod('mindMap')} className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-bold transition-all ${activeMethod === 'mindMap' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>1. Mind Map</button>
+                             <button onClick={() => setActiveMethod('collocations')} className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-bold transition-all ${activeMethod === 'collocations' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>2. Collocations</button>
+                             <button onClick={() => setActiveMethod('frayer')} className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-bold transition-all ${activeMethod === 'frayer' ? 'bg-indigo-600 text-white shadow-md transform scale-105' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>3. Frayer Model</button>
+                             <button onClick={() => setActiveMethod('practice')} className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-bold transition-all border-2 border-indigo-500 ${activeMethod === 'practice' ? 'bg-indigo-100 text-indigo-800 shadow-md transform scale-105' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}><i className="fas fa-dumbbell mr-2"></i> 4. Network Practice</button>
                          </div>
 
                          {/* Mind Map View */}
@@ -461,6 +448,73 @@
                                   )}
                               </div>
                          )}
+
+                         {/* Network Practice Quiz View */}
+                         {activeMethod === 'practice' && (
+                             <div className="bg-indigo-50/50 p-6 rounded-xl border border-indigo-200 animate-fade-in">
+                                 {!pqStarted ? (
+                                     <div className="text-center py-8">
+                                         <i className="fas fa-dumbbell text-6xl text-indigo-400 mb-4"></i>
+                                         <h3 className="text-2xl font-bold text-indigo-900 mb-4">Word Network Challenge</h3>
+                                         <p className="text-slate-600 mb-8 max-w-lg mx-auto">
+                                             Test your semantic network! You will face <strong>30 questions</strong> focusing on collocations, synonyms, antonyms, and word associations instead of just basic definitions.
+                                         </p>
+                                         <button onClick={startPracticeQuiz} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl text-lg shadow-md transition transform hover:scale-105">
+                                             Start 30-Question Challenge
+                                         </button>
+                                     </div>
+                                 ) : pqShowResult ? (
+                                     <div className="text-center py-8">
+                                         <i className={`fas fa-trophy text-6xl mb-4 ${pqScore >= 20 ? 'text-yellow-400' : 'text-slate-400'}`}></i>
+                                         <h2 className="text-3xl font-bold text-slate-800 mb-2">Challenge Complete!</h2>
+                                         <div className="text-5xl font-extrabold text-indigo-600 mb-6">{pqScore} / {pqQuestions.length}</div>
+                                         <button onClick={startPracticeQuiz} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-md transition">
+                                             Retake Challenge
+                                         </button>
+                                     </div>
+                                 ) : (
+                                     <div className="max-w-2xl mx-auto">
+                                         <div className="flex justify-between items-center mb-4">
+                                             <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Question {pqCurrent + 1} of {pqQuestions.length}</span>
+                                             <span className="text-xs font-bold text-indigo-800 uppercase tracking-wider">Score: {pqScore}</span>
+                                         </div>
+                                         <div className="w-full bg-indigo-100 rounded-full h-2 mb-6">
+                                             <div className="bg-indigo-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((pqCurrent + 1) / pqQuestions.length) * 100}%` }}></div>
+                                         </div>
+                                         
+                                         <h3 className="text-xl font-bold text-slate-800 mb-6">"{pqQuestions[pqCurrent].prompt}"</h3>
+                                         
+                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                                             {pqQuestions[pqCurrent].options.map((opt, idx) => {
+                                                 let btnStyle = "bg-white border-2 border-indigo-100 text-slate-700 hover:border-indigo-400";
+                                                 if (pqSelectedAnswer) {
+                                                     if (opt === pqQuestions[pqCurrent].correct) btnStyle = "bg-emerald-500 border-emerald-600 text-white";
+                                                     else if (opt === pqSelectedAnswer) btnStyle = "bg-rose-500 border-rose-600 text-white";
+                                                     else btnStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
+                                                 }
+                                                 return (
+                                                     <button key={idx} onClick={() => handlePqAnswer(opt)} disabled={!!pqSelectedAnswer} className={`p-4 rounded-xl font-bold text-md transition-all ${btnStyle}`}>
+                                                         {opt}
+                                                     </button>
+                                                 );
+                                             })}
+                                         </div>
+
+                                         {pqSelectedAnswer && (
+                                             <div className="bg-white border border-indigo-200 rounded-xl p-5 flex flex-col sm:flex-row justify-between items-center animate-fade-in shadow-sm">
+                                                 <div className="mb-4 sm:mb-0 max-w-sm">
+                                                     <h4 className="font-bold text-indigo-400 text-xs uppercase tracking-wider mb-1"><i className="fas fa-info-circle mr-1"></i> Network Note:</h4>
+                                                     <p className="font-medium text-slate-700 text-sm">{pqQuestions[pqCurrent].feedback}</p>
+                                                 </div>
+                                                 <button onClick={nextPqQuestion} className="whitespace-nowrap bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg shadow transition ml-0 sm:ml-4">
+                                                     {pqCurrent + 1 === pqQuestions.length ? 'Results' : 'Next'} <i className="fas fa-arrow-right ml-1"></i>
+                                                 </button>
+                                             </div>
+                                         )}
+                                     </div>
+                                 )}
+                             </div>
+                         )}
                      </div>
                  </div>
              );
@@ -474,18 +528,29 @@
             const [selectedAnswer, setSelectedAnswer] = useState(null);
             const [quizStarted, setQuizStarted] = useState(false);
 
-            const startQuiz = () => {
-                // Shuffle all 30 questions
-                const shuffled = [...quizQuestionsData].sort(() => 0.5 - Math.random());
-                
-                // Shuffle options inside each question to prevent patterns
-                const randomizedOptionsQuestions = shuffled.map(q => {
-                    return {
-                        ...q,
-                        options: [...q.options].sort(() => 0.5 - Math.random())
-                    }
-                });
+            const quizQuestionsData = [
+                { situation: "When my little brother deleted my 100-hour game save file, I started to ___.", correct: "see red", options: ["see red", "feel blue", "stick around", "break down"], feedback: "Idiom: To become very angry suddenly." },
+                { situation: "My parents won't let me stay out past 10 PM, but 10:15 is kind of ___.", correct: "a gray area", options: ["a gray area", "a white-knuckle ride", "a priority", "a sickness"], feedback: "Idiom: An unclear situation where the rules aren't obvious." },
+                { situation: "After her dog ran away, Sarah was ___ for weeks.", correct: "feeling blue", options: ["feeling blue", "seeing red", "green with envy", "creative"], feedback: "Idiom: Feeling sad or depressed." },
+                { situation: "I couldn't get official tickets to the concert, so I had to buy them ___.", correct: "on the black market", options: ["on the black market", "in a gray area", "green with envy", "feeling blue"], feedback: "Idiom: Bought or sold illegally." },
+                { situation: "When he showed up at school in a brand new sports car, all his friends were ___.", correct: "green with envy", options: ["green with envy", "feeling blue", "seeing red", "a white-knuckle ride"], feedback: "Idiom: Very jealous of someone else's success or belongings." },
+                { situation: "That new horror movie was intense from start to finish; it was a total ___.", correct: "white-knuckle ride", options: ["white-knuckle ride", "gray area", "possibility", "priority"], feedback: "Idiom: A thrilling or terrifying experience." },
+                { situation: "He didn't have the ___ to lift the heavy box by himself.", correct: "strength", options: ["strength", "strong", "thickness", "thick"], feedback: "Noun form of strong: Having physical or mental power." },
+                { situation: "There is a strong ___ that it will snow tomorrow, so we might not have school.", correct: "possibility", options: ["possibility", "possible", "significance", "significant"], feedback: "Noun form of possible: A chance that something might happen." },
+                { situation: "Finishing my homework is my top ___ right now; I can play video games later.", correct: "priority", options: ["priority", "prior", "possibility", "possible"], feedback: "Noun form of prior: Something that is more important than other things." },
+                { situation: "We usually ___ a gallon of milk every two days in our house.", correct: "go through", options: ["go through", "run out of", "cut down on", "break down"], feedback: "Phrasal Verb: To use up a lot of something entirely." },
+                { situation: "Please ___ your gum in the trash can, not under the desk!", correct: "dispose of", options: ["dispose of", "build up", "stick around", "come up with"], feedback: "Phrasal Verb: To throw away correctly." },
+                { situation: "Plastic bottles take hundreds of years to ___ in a landfill.", correct: "break down", options: ["break down", "build up", "kill off", "speed up"], feedback: "Phrasal Verb: To separate into smaller parts or decompose." },
+                { situation: "If you don't sweep the floor, the dust and hair will just ___ in the corners.", correct: "build up", options: ["build up", "break down", "dispose of", "run out of"], feedback: "Phrasal Verb: To increase or collect over time." },
+                { situation: "I think I'll ___ after class to ask the teacher a few questions.", correct: "stick around", options: ["stick around", "go through", "run out of", "kill off"], feedback: "Phrasal Verb: To stay somewhere for a period of time." },
+                { situation: "I need to ___ sugar because I've been eating way too much candy lately.", correct: "cut down on", options: ["cut down on", "speed up", "build up", "go through"], feedback: "Phrasal Verb: To reduce the amount you use or do." }
+            ];
 
+            const startQuiz = () => {
+                const shuffled = [...quizQuestionsData].sort(() => 0.5 - Math.random()).slice(0, 15);
+                const randomizedOptionsQuestions = shuffled.map(q => {
+                    return { ...q, options: [...q.options].sort(() => 0.5 - Math.random()) }
+                });
                 setQuestions(randomizedOptionsQuestions);
                 setCurrentQ(0);
                 setScore(0);
@@ -497,9 +562,7 @@
             const handleAnswer = (option) => {
                 if (selectedAnswer) return; 
                 setSelectedAnswer(option);
-                if (option === questions[currentQ].correct) {
-                    setScore(score + 1);
-                }
+                if (option === questions[currentQ].correct) setScore(score + 1);
             };
 
             const nextQuestion = () => {
@@ -513,12 +576,12 @@
 
             if (!quizStarted) {
                 return (
-                    <div className="bg-white rounded-2xl shadow-lg p-10 text-center max-w-2xl mx-auto">
-                        <i className="fas fa-brain text-6xl text-blue-500 mb-6"></i>
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-10 text-center max-w-2xl mx-auto">
+                        <i className="fas fa-brain text-6xl text-slate-800 mb-6"></i>
                         <h2 className="text-3xl font-bold text-slate-800 mb-4">Vocabulary Challenge</h2>
-                        <p className="text-slate-600 mb-8 text-lg">Test your knowledge! You will face <strong>30 situational questions</strong> designed to test your understanding of Unit 7 idioms, word families, and environment verbs in context.</p>
-                        <button onClick={startQuiz} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl text-xl shadow-md transition transform hover:scale-105">
-                            Start 30-Question Quiz
+                        <p className="text-slate-600 mb-8 text-lg">Test your knowledge! You will face situational questions designed to test your understanding of Unit 7 vocabulary in context.</p>
+                        <button onClick={startQuiz} className="bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-10 rounded-xl text-xl shadow-md transition transform hover:scale-105">
+                            Start Quiz
                         </button>
                     </div>
                 );
@@ -529,16 +592,15 @@
                 let message = "";
                 if (percentage >= 90) message = "Outstanding! You've mastered this unit completely.";
                 else if (percentage >= 70) message = "Great job! You know these situations well.";
-                else if (percentage >= 50) message = "Good effort, but keep practicing the idioms.";
-                else message = "Time to review the flashcards again!";
+                else message = "Time to review the word networks again!";
 
                 return (
-                    <div className="bg-white rounded-2xl shadow-lg p-10 text-center max-w-2xl mx-auto">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-10 text-center max-w-2xl mx-auto">
                         <i className={`fas fa-trophy text-6xl mb-6 ${percentage >= 70 ? 'text-yellow-400' : 'text-slate-300'}`}></i>
                         <h2 className="text-4xl font-bold text-slate-800 mb-2">Quiz Complete!</h2>
                         <p className="text-xl text-slate-600 mb-6">{message}</p>
-                        <div className="text-5xl font-extrabold text-blue-600 mb-8">{score} / {questions.length}</div>
-                        <button onClick={startQuiz} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-md transition mr-4">
+                        <div className="text-5xl font-extrabold text-slate-800 mb-8">{score} / {questions.length}</div>
+                        <button onClick={startQuiz} className="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-xl shadow-md transition mr-4">
                             Retake Quiz
                         </button>
                     </div>
@@ -549,60 +611,39 @@
 
             return (
                 <div className="max-w-3xl mx-auto">
-                    {/* Progress Bar */}
                     <div className="mb-6 flex justify-between items-center">
                         <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Question {currentQ + 1} of {questions.length}</span>
-                        <span className="text-sm font-bold text-blue-500 uppercase tracking-wider">Score: {score}</span>
+                        <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">Score: {score}</span>
                     </div>
                     <div className="w-full bg-slate-200 rounded-full h-2.5 mb-8">
-                        <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}></div>
+                        <div className="bg-slate-800 h-2.5 rounded-full transition-all duration-500" style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}></div>
                     </div>
-
-                    {/* Question Card */}
-                    <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 border-t-4 border-blue-500">
+                    <div className="bg-white rounded-2xl shadow-sm p-8 mb-6 border-t-4 border-slate-800">
                         <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Fill in the blank:</h3>
                         <p className="text-2xl font-semibold text-slate-800 leading-relaxed">"{q.situation}"</p>
                     </div>
-
-                    {/* Options */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                         {q.options.map((option, index) => {
-                            let btnStyle = "bg-white border-2 border-slate-200 text-slate-700 hover:border-blue-500 hover:bg-blue-50";
-                            
+                            let btnStyle = "bg-white border-2 border-slate-200 text-slate-700 hover:border-slate-800 hover:bg-slate-50";
                             if (selectedAnswer) {
-                                if (option === q.correct) {
-                                    btnStyle = "bg-green-500 border-green-600 text-white shadow-md"; // Correct answer highlights green
-                                } else if (option === selectedAnswer) {
-                                    btnStyle = "bg-red-500 border-red-600 text-white shadow-md"; // Wrong selection highlights red
-                                } else {
-                                    btnStyle = "bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed opacity-60"; // Others fade out
-                                }
+                                if (option === q.correct) btnStyle = "bg-emerald-500 border-emerald-600 text-white shadow-md"; 
+                                else if (option === selectedAnswer) btnStyle = "bg-rose-500 border-rose-600 text-white shadow-md";
+                                else btnStyle = "bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed opacity-60"; 
                             }
-
                             return (
-                                <button 
-                                    key={index}
-                                    onClick={() => handleAnswer(option)}
-                                    disabled={!!selectedAnswer}
-                                    className={`p-4 rounded-xl font-bold text-lg transition-all ${btnStyle}`}
-                                >
+                                <button key={index} onClick={() => handleAnswer(option)} disabled={!!selectedAnswer} className={`p-4 rounded-xl font-bold text-lg transition-all ${btnStyle}`}>
                                     {option}
                                 </button>
                             );
                         })}
                     </div>
-
-                    {/* Feedback & Next Button */}
                     {selectedAnswer && (
-                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex flex-col sm:flex-row justify-between items-center animate-fade-in">
+                        <div className="bg-slate-100 border border-slate-300 rounded-xl p-6 flex flex-col sm:flex-row justify-between items-center animate-fade-in">
                             <div className="mb-4 sm:mb-0 max-w-md">
-                                <h4 className="font-bold text-blue-800 text-sm uppercase tracking-wider mb-1">Learning Note:</h4>
-                                <p className="font-medium text-blue-900">{q.feedback}</p>
+                                <h4 className="font-bold text-slate-600 text-sm uppercase tracking-wider mb-1">Learning Note:</h4>
+                                <p className="font-medium text-slate-800">{q.feedback}</p>
                             </div>
-                            <button 
-                                onClick={nextQuestion}
-                                className="whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow transition ml-0 sm:ml-4"
-                            >
+                            <button onClick={nextQuestion} className="whitespace-nowrap bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-6 rounded-lg shadow transition ml-0 sm:ml-4">
                                 {currentQ + 1 === questions.length ? 'See Results' : 'Next Question'} <i className="fas fa-arrow-right ml-2"></i>
                             </button>
                         </div>
@@ -661,7 +702,7 @@
                                 <span className="text-xl mr-2">🌍</span> Environment Verbs
                             </button>
                             <div className="w-px bg-slate-300 mx-2 hidden sm:block"></div>
-                             <button onClick={() => setActiveTab('network')} className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'network' ? 'bg-indigo-50 border-indigo-500 text-indigo-700 shadow-md transform scale-105' : 'bg-slate-100 border-transparent text-slate-600 hover:bg-slate-200 shadow-sm'}`}>
+                             <button onClick={() => setActiveTab('network')} className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'network' ? 'bg-indigo-50 border-indigo-500 text-indigo-700 shadow-md transform scale-105' : 'bg-white border-transparent text-slate-600 hover:bg-slate-50 shadow-sm'}`}>
                                 <i className="fas fa-project-diagram mr-2"></i> Word Networks
                             </button>
                             <button onClick={() => setActiveTab('quiz')} className={`px-6 py-3 rounded-xl font-bold transition-all border-2 flex items-center ${activeTab === 'quiz' ? 'bg-slate-800 border-slate-800 text-white shadow-md transform scale-105' : 'bg-slate-800 border-transparent text-white hover:bg-slate-700 shadow-md'}`}>
